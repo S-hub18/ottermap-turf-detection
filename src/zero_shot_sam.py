@@ -103,7 +103,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True)
     ap.add_argument("--out_dir", default="../results/external_preds")
+    ap.add_argument("--box_thresh", type=float, default=0.25)
+    ap.add_argument("--text_thresh", type=float, default=0.2)
     args = ap.parse_args()
     import os
     os.makedirs(args.out_dir, exist_ok=True)
-    run_zero_shot(args.image, args.out_dir)
+    run_zero_shot(args.image, args.out_dir, box_threshold=args.box_thresh, text_threshold=args.text_thresh)

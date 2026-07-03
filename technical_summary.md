@@ -33,6 +33,11 @@ While the Logical AND solved 90% of the domain gap, both models occasionally agr
 ### D. Empirical Validation of the Ensemble Trade-off
 To mathematically justify this ensemble, we evaluated the standalone components vs. the final ensemble directly against the source training images (`1.tiff` and `2.tiff`):
 
+**Source Image 3 (IoU):**
+- **Standalone U-Net:** `0.8508`
+- **Zero-Shot SAM:** `0.4761`
+- **Final Ensemble:** `0.7088`
+
 **Source Image 2 (IoU):**
 - **Standalone U-Net:** `0.8355`
 - **Zero-Shot SAM:** `0.5059` 

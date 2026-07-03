@@ -19,7 +19,9 @@ def main():
     subprocess.run([
         sys.executable, "src/zero_shot_sam.py",
         "--image", args.image,
-        "--out_dir", sam_out_dir
+        "--out_dir", sam_out_dir,
+        "--box_thresh", "0.1",
+        "--text_thresh", "0.1"
     ], check=True)
 
     print(f"\n[2/4] Running Hypersensitive U-Net (Threshold 0.1)...")
