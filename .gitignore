@@ -1,0 +1,17 @@
+# Python virtual environments
+venv/
+__pycache__/
+*.pyc
+
+# Data & Output directories (Heavy)
+data/
+results/
+outputs_gis/
+outputs_gis_final/
+
+# Weights (Ignore all checkpoints except the final one)
+weights/*.pt
+!weights/turf_unet_resnet34_full.pt
+
+# System files
+.DS_Store

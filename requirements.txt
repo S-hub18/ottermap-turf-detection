@@ -1,0 +1,24 @@
+# Core
+numpy
+opencv-python
+Pillow
+tifffile
+
+# Geospatial
+rasterio
+geopandas
+shapely
+pyshp
+
+# Deep learning
+torch
+torchvision
+segmentation-models-pytorch
+albumentations
+
+# Zero-shot foundation models (ensemble comparison)
+transformers
+accelerate
+
+# Misc
+tqdm

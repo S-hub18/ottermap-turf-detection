@@ -1,0 +1,35 @@
+model:
+  architecture: Unet
+  encoder: resnet34
+  encoder_weights: imagenet
+  classes: 1
+
+tiling:
+  tile_width: 256
+  tile_height: 512
+  stride_x: 192
+  stride_y: 384
+  keep_empty_ratio: 0.15
+  val_frac: 0.2          # spatial right-hand strip per source image
+
+training:
+  epochs: 40
+  warmup_epochs: 5        # encoder frozen
+  batch_size: 8
+  lr: 1.0e-3
+  encoder_lr_mult: 0.1    # applied after warmup
+  loss: 0.5 * BCE + 0.5 * Dice
+
+inference:
+  tile_width: 256
+  tile_height: 512
+  stride_x: 192
+  stride_y: 384
+  threshold: 0.5
+
+zero_shot:
+  grounding_dino_model: IDEA-Research/grounding-dino-tiny
+  sam_model: facebook/sam-vit-base
+  text_prompt: "grass. lawn. turf. mowed field."
+  box_threshold: 0.25
+  text_threshold: 0.2
