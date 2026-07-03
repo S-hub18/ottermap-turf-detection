@@ -30,6 +30,21 @@ While the Logical AND solved 90% of the domain gap, both models occasionally agr
 - **Calibration:** Through empirical sweeping across thresholds (0.05 to 0.5 on normalized pixel intensity), we settled on an absolute un-normalized threshold of `> 10`.
 - **Result:** This strict mechanical gatekeeper completely stripped the remaining asphalt leakage without destroying true grass boundaries.
 
+### D. Empirical Validation of the Ensemble Trade-off
+To mathematically justify this ensemble, we evaluated the standalone components vs. the final ensemble directly against the source training images (`1.tiff` and `2.tiff`):
+
+**Source Image 2 (IoU):**
+- **Standalone U-Net:** `0.8355`
+- **Zero-Shot SAM:** `0.5059` 
+- **Final Ensemble:** `0.7711`
+
+**Source Image 1 (IoU):**
+- **Standalone U-Net:** `0.5703`
+- **Zero-Shot SAM:** `0.0961`
+- **Final Ensemble:** `0.5657`
+
+**The Engineering Takeaway:** On the *source training distribution*, the standalone U-Net is the mathematically optimal model, while SAM performs terribly due to unbounded geometric hallucinations (scoring as low as `0.09` IoU). By enforcing the ensemble, we take a slight ~`0.05` IoU penalty on the source domain. However, as proven on the 9 blind test images, absorbing this minor penalty is the only way to prevent the pipeline from catastrophically failing (`0.00` IoU) when deployed into completely unseen domains with different lighting/seasons.
+
 ## 4. Inference & Vectorization
 The final pipeline outputs the intersected raster mask and executes a fully automated vectorization step. It extracts contours using `cv2.findContours`, filters out micro-noise artifacts under 30 pixels (an area heuristic), simplifies the geometry via the Douglas-Peucker algorithm (`tolerance = 0.00001`), and exports directly to GIS-ready `.geojson`. 
 
