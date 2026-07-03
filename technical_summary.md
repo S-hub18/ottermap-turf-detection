@@ -8,7 +8,7 @@ The primary constraint of this challenge was the extreme scarcity of domain vari
 
 ## 2. The Generalization Failure (Domain Gap)
 Despite the high training IoU, the standalone U-Net exhibited severe domain gap failures when tested against a rigorous blind evaluation set of **9 unseen images** from vastly different environments (e.g., suburban Texas, Florida beaches, arid regions):
-1. **False Negatives (Lighting):** In regions with dark lighting or shadow (e.g., test4, test5), the U-Net missed up to 50% of the actual turf because the spectral profile shifted out of its narrow trained distribution.
+1. **False Negatives (Lighting):** In regions with dark lighting or shadow (e.g., test3, test4), the U-Net missed up to 50% of the actual turf because the spectral profile shifted out of its narrow trained distribution.
 2. **False Positives (Pavement):** The model occasionally confused gray asphalt with dead grass.
 
 ## 3. The Triple-Intersection Ensemble (Final Pipeline)
@@ -16,7 +16,7 @@ To solve these mechanical failures without requiring thousands of new training i
 
 ### A. Hypersensitive U-Net (Recall Maximization)
 Instead of forcing the U-Net to perfectly balance precision and recall at a standard 0.5 threshold, we shifted its entire purpose to **recall maximization**. We empirically dropped the activation threshold to **0.1**. 
-- **Result:** This captured near-perfect boundaries on dark/unseen turf (e.g., recovering 95%+ of the turf on test4 and test8), but at the cost of massive false-positive "blooming" into surrounding driveways.
+- **Result:** This captured near-perfect boundaries on dark/unseen turf (e.g., recovering 95%+ of the turf on test3 and test8), but at the cost of massive false-positive "blooming" into surrounding driveways.
 
 ### B. Zero-Shot SAM (Geometric Grounding)
 To reign in the false positives, we introduced a Zero-Shot pipeline using **Grounding DINO** (prompted with "grass. turf.") hooked into Meta's **Segment Anything Model (SAM)**.

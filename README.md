@@ -47,8 +47,8 @@ On paper, it looked fantastic. The model achieved a **Validation mIoU of 87.45%*
 **The Reality Check:**
 Then we threw it at completely unseen test images downloaded from different domains. It immediately fell apart. Because it had overfit to the *spectral signatures* (the specific shades of green and brown) of the training set, it either hallucinated grass on gray pavements or completely missed obvious lawns in new lighting conditions. 
 
-> **Test Domain Failure:** The standard U-Net (0.5 threshold) on `test6.jpeg` predicting only 4.63% coverage and missing massive chunks of obvious grass.
-> ![Test 6 U-Net Failure](docs/images/test6_unet_overlay.png)
+> **Test Domain Failure:** The standard U-Net (0.5 threshold) on `test5.jpeg` predicting only 4.63% coverage and missing massive chunks of obvious grass.
+> ![Test 6 U-Net Failure](docs/images/test5_unet_overlay.png)
 
 ---
 
@@ -61,13 +61,13 @@ We built a zero-shot pipeline using **Grounding DINO** (to find bounding boxes m
 **What we found:**
 SAM completely solved the problem the U-Net had. While the U-Net missed obvious grass because the color was slightly off, SAM didn't care about color at all—it locked onto the crisp, physical geometric boundaries of the lawns flawlessly. It found all the grass that the U-Net missed.
 
-> **Where SAM Won:** On `test4.jpg`, the lighting is extremely dark. The standalone U-Net completely failed (predicting 0.00% coverage even at permissive thresholds). SAM, relying purely on geometry, easily found the lawns.
-> ![Test 4 SAM Success](docs/images/test4_zeroshot_overlay.png)
+> **Where SAM Won:** On `test3.jpg`, the lighting is extremely dark. The standalone U-Net completely failed (predicting 0.00% coverage even at permissive thresholds). SAM, relying purely on geometry, easily found the lawns.
+> ![Test 4 SAM Success](docs/images/test3_zeroshot_overlay.png)
 
 But SAM had its own fatal flaw: it has no idea what grass actually *is*. If Grounding DINO drew a bounding box that slightly overlapped a driveway, SAM would confidently segment the entire driveway along with the lawn because they shared a continuous geometric boundary. 
 
-> **Where SAM Failed (Leakage):** SAM on `test6.jpeg`. It captures the grass beautifully (which the U-Net failed to do!), but aggressively leaks out into the surrounding non-turf terrain (the driveway and road). 
-> ![Test 6 SAM](docs/images/test6_zeroshot_overlay.png)
+> **Where SAM Failed (Leakage):** SAM on `test5.jpeg`. It captures the grass beautifully (which the U-Net failed to do!), but aggressively leaks out into the surrounding non-turf terrain (the driveway and road). 
+> ![Test 6 SAM](docs/images/test5_zeroshot_overlay.png)
 
 We had two fundamentally different models that acted as a perfect **Yin and Yang**:
 - The U-Net was great at knowing *what color grass is*, but terrible at finding its boundaries in new lighting.
@@ -89,8 +89,8 @@ Here is how the final architecture works:
 **The Final Result:**
 The ensemble approach perfectly isolates the turf, snapping to exact boundaries while rejecting the false positives that plagued both standalone models.
 
-> **Final Ensemble Success (Unseen Test Domain):** The triple-intersection pipeline on `test6.jpeg`. Perfect boundaries, high recall, and zero pavement leakage.
-> ![Test 6 Final Ensemble](docs/images/test6_agree_overlay.png)
+> **Final Ensemble Success (Unseen Test Domain):** The triple-intersection pipeline on `test5.jpeg`. Perfect boundaries, high recall, and zero pavement leakage.
+> ![Test 6 Final Ensemble](docs/images/test5_agree_overlay.png)
 
 > **Final Ensemble Success (Original Training Domain):** The pipeline also performs flawlessly on the original training images, confirming that the strict SAM geometry filter does not harm performance where the standalone U-Net already succeeded.
 > ![Train Image 1 Final Ensemble](docs/images/train_1_exg_sweep_0.1.png)
