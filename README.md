@@ -1,4 +1,4 @@
-# Ottermap Turf/Grass Detection — 72-Hour Challenge Submission
+# Ottermap Turf/Grass Detection — 
 
 ## Project Summary
 **End-to-end pipeline:** Aerial GeoTIFF + verified GeoJSON turf labels → rasterized masks → rectangular tiling → fine-tuned hypersensitive U-Net + Zero-Shot SAM Ensemble → GIS-compatible vector output.
